@@ -30,14 +30,14 @@ void UFollowSmoothMovementComponent::MoveToTarget()
 void UFollowSmoothMovementComponent::DrawDebug()
 {
 	const UWorld* _w = GetWorld();
-	if (!IsValidComponent())
+	if (!IsValidComponent()|| !debugSettings.useDebug)
 	{
 		DrawDebugBox(_w, CurrentPosition(),FVector(100),FColor::Red);
 		return;
 	}
-	DrawDebugLine(_w, CurrentPosition(), settings.TargetPosition(), FColor::Green);
-	DrawDebugSphere(_w , CurrentPosition(), 100, 12, FColor::Green);
-	DrawDebugSphere(_w , settings.TargetPosition(), 100, 12, FColor::Green);
-	DrawDebugCircle(_w , settings.TargetPosition(), settings.range, 30, FColor::Magenta, false ,-1,0,2,FVector(1,0,0),FVector(0,1,0));
+	DrawDebugLine(_w, CurrentPosition(), settings.TargetPosition(), debugSettings.debugColor);
+	DrawDebugSphere(_w , CurrentPosition(), debugSettings.sphereRadius, debugSettings.debugSegment, debugSettings.debugColor);
+	DrawDebugSphere(_w , settings.TargetPosition(), debugSettings.sphereRadius, debugSettings.debugSegment, debugSettings.debugColor);
+	DrawDebugCircle(_w , settings.TargetPosition(), settings.range, 30, debugSettings.debugColor, false ,-1,0,2,FVector(1,0,0),FVector(0,1,0));
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "FollowSmoothMoveComponent.h"
 #include "FollowSmoothMovementComponent.generated.h"
 
 USTRUCT()
@@ -38,7 +39,10 @@ class CCCPROJECT_API UFollowSmoothMovementComponent : public UActorComponent
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category = "Movement Settings")
-		FMovementSettings settings;
+		FMovementSettings settings;	
+	UPROPERTY(EditAnywhere, Category = "Movement Settings")
+		FDebugSettings debugSettings;
+
 public:	
 	UFollowSmoothMovementComponent();
 	FORCEINLINE FMovementSettings& Settings() { return settings; }
