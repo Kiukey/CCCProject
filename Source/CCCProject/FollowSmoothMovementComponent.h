@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "FollowSmoothMoveComponent.h"
+#include "Move.h"
 #include "FollowSmoothMovementComponent.generated.h"
 
 USTRUCT()
@@ -34,7 +35,7 @@ struct FMovementSettings
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CCCPROJECT_API UFollowSmoothMovementComponent : public UActorComponent
+class CCCPROJECT_API UFollowSmoothMovementComponent : public UActorComponent, public IMove
 {
 	GENERATED_BODY()
 	
@@ -48,9 +49,16 @@ public:
 	FORCEINLINE FMovementSettings& Settings() { return settings; }
 	FORCEINLINE FVector CurrentPosition() const { return GetOwner()->GetActorLocation(); }
 	FORCEINLINE bool IsValidComponent() const { return settings.target != nullptr; }
+#pragma region IMOVE
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Movement)
+		void MoveToTarget();
+	virtual void MoveToTarget_Implementation();
+
+#pragma endregion
 private:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void MoveToTarget();
+	//void MoveToTarget();
 	void DrawDebug();
 };

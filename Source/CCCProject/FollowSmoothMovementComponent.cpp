@@ -2,6 +2,8 @@
 
 
 #include "FollowSmoothMovementComponent.h"
+#include "LogUtils.h"
+#include "GizmosUtils.h"
 
 UFollowSmoothMovementComponent::UFollowSmoothMovementComponent()
 {
@@ -11,16 +13,31 @@ UFollowSmoothMovementComponent::UFollowSmoothMovementComponent()
 void UFollowSmoothMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//LOG("OK");
+	//LOG_WARNING("Warning");
+	//LOG_ERROR("ERROR");
+	//SCREEN_MSG("Test", 5, FColor::Blue);
 }
 void UFollowSmoothMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	MoveToTarget();
+	MoveToTarget_Implementation();
 	DrawDebug();
+	/*DRAW_SPHERE(GetOwner()->GetActorLocation(), 250, 15, FColor::Black);
+	DRAW_BOX(GetOwner()->GetActorLocation(), FVector(50), FColor::Red);
+	DRAW_CIRCLE(settings.TargetPosition(), 500, 30, FColor::Black, FVector(1, 0, 0), FVector(0, 1, 0))*/
 }
-void UFollowSmoothMovementComponent::MoveToTarget()
+void UFollowSmoothMovementComponent::MoveToTarget_Implementation()
 {
+	//GetClass()->ImplementsInterface(UMove::StaticClass());
+	//IF TRUE
+	//TScriptInterface<IMove> _int;
+	//_int.SetInterface(Cast<IMove>(this));
+	//_int.SetObject(this);
+	//if (_int != nullptr)
+	//	_int->Execute_MoveToTarget(this);
+	//
+
 	if (!IsValidComponent() || settings.IsAtRange(CurrentPosition()))
 		return;
 	const FVector _move = FMath::Lerp(CurrentPosition(), settings.TargetPosition(), settings.speed * GetWorld()->DeltaTimeSeconds);
