@@ -62,6 +62,7 @@ void ACameraTPS::DrawDebug()
 	UWorld* _world = GetWorld();
 	const FVector _currentLocation = GetActorLocation();
 
+	DRAW_SPHERE(_currentLocation, 50,20, FColor::Red);
 	positionSettings.DrawMoveToStatus(_world, _currentLocation);
 	lookAtSettings.DrawLookAtStatus(_world, _currentLocation);
 	if (!IsCameraTPSValid())

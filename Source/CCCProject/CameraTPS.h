@@ -10,7 +10,7 @@
 #include "CameraTPS.generated.h"
 
 USTRUCT()
-struct FCameraOffset
+struct FCameraOffsetCustom
 {
 	GENERATED_BODY()
 
@@ -39,7 +39,7 @@ public:
 
 
 USTRUCT()
-struct FCameraPositionSettings
+struct FCameraPositionSettingsCustom
 {
 	GENERATED_BODY()
 
@@ -54,7 +54,7 @@ struct FCameraPositionSettings
 	UPROPERTY(EditAnywhere)
 		bool useSmoothMoveTo = true;
 	UPROPERTY(EditAnywhere, Category = "Camera offset")
-		FCameraOffset offset;
+		FCameraOffsetCustom offset;
 	
 public : 
 
@@ -79,12 +79,12 @@ public :
 	{
 		if (!drawGizmos)
 			return;
-		DrawDebugSphere(_world,_origin + FVector::UpVector * 1.5f, 80, 15, useMoveTo ? validMoveToColor : FColor::Red);
+		DrawDebugSphere(_world,_origin + FVector::UpVector * 160, 50, 15, useMoveTo ? validMoveToColor : FColor::Red);
 		DrawDebugLine(_world,_origin, _origin + FVector::UpVector * 2, FColor::White);
 	}
 };
 USTRUCT()
-struct FCameraRotationSettings
+struct FCameraRotationSettingsCustom
 {
 	GENERATED_BODY()
 
@@ -99,7 +99,7 @@ struct FCameraRotationSettings
 	UPROPERTY(EditAnywhere)
 		bool useSmoothLookAt = true;
 	UPROPERTY(EditAnywhere, Category = "Camera offset")
-		FCameraOffset offset;
+		FCameraOffsetCustom offset;
 
 public:
 
@@ -124,7 +124,7 @@ public:
 	{
 		if (!drawGizmos)
 			return;
-		DrawDebugSphere(_world, _origin + FVector::UpVector * 1.5f, 80, 15, useLookAt ? validLookAtColor : FColor::Red);
+		DrawDebugSphere(_world, _origin + FVector::UpVector * 80, 50, 15, useLookAt ? validLookAtColor : FColor::Red);
 		DrawDebugLine(_world, _origin, _origin + FVector::UpVector * 2, FColor::White);
 	}
 };
@@ -140,9 +140,9 @@ class CCCPROJECT_API ACameraTPS : public AActor
 	UPROPERTY(VisibleAnywhere)
 		UCameraComponent* currentCamera = nullptr;
 	UPROPERTY(EditAnywhere, Category = " Settings | Look at Settings")
-		FCameraRotationSettings lookAtSettings;
+		FCameraRotationSettingsCustom lookAtSettings;
 	UPROPERTY(EditAnywhere, Category = "Settings | Move to Settings")
-		FCameraPositionSettings positionSettings;
+		FCameraPositionSettingsCustom positionSettings;
 	UPROPERTY(EditAnywhere)
 		bool useDebug = true;
 	UPROPERTY(EditAnywhere)
