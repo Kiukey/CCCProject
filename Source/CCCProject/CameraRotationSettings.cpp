@@ -3,20 +3,28 @@
 
 #include "CameraRotationSettings.h"
 #include "GizmosUtils.h"
-void UCameraRotationSettings::DrawLookAtStatus(const FVector& _origin)
+#include "LogUtils.h"
+void UCameraRotationSettings::DrawLookAtStatus(const FVector& _origin, UWorld* _world)
 {
 	if (!drawGizmos)
 		return;
 
-	DRAW_SPHERE(_origin + FVector::UpVector * 200, 50,12, useLookAt ? validLookAtColor : FColor::Red);
-	DRAW_LINE(_origin + FVector::UpVector * 200, _origin, FColor::White);
+	DrawDebugSphere(_world, _origin + FVector::UpVector * 200, 50,12, useLookAt ? validLookAtColor : FColor::Red);
+	DrawDebugLine(_world, _origin + FVector::UpVector * 200, _origin, FColor::White);
 }
 
-void UCameraRotationSettings::DrawLookAtTarget(FVector _targetPosition, FVector _origin, FColor _color)
+void UCameraRotationSettings::DrawLookAtTarget(FVector _targetPosition, FVector _origin, FColor _color, UWorld* _world)
 {
 	if (!drawGizmos)
 		return;
 
-	DRAW_SPHERE(_targetPosition, 50, 12, _color);
-	DRAW_LINE(_origin, _targetPosition, _color);
+	DrawDebugSphere(_world,	_targetPosition, 50, 12, _color);
+	DrawDebugLine(_world,_origin, _targetPosition, _color);
+}
+
+ FVector UCameraRotationSettings::GetLookAtTarget(const AActor* _origin)
+{
+	 if (!_origin)
+		 return offset.Offset();
+	return offset.useLocalOffset ? offset.GetLocalOffset(_origin) : _origin->GetActorLocation() + offset.Offset();
 }

@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "FCameraOffset.h"
+#include "engine/DataAsset.h"
 #include "CameraRotationSettings.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CCCPROJECT_API UCameraRotationSettings : public UObject
+class CCCPROJECT_API UCameraRotationSettings : public UDataAsset
 {
 	GENERATED_BODY()
 	
@@ -32,7 +33,7 @@ public:
 	FORCEINLINE float RotationSpeed() { return rotationSpeed; }
 	FORCEINLINE bool UseSmoothLookAt() { return useSmoothLookAt; }
 	FORCEINLINE bool DrawGizmos() { return drawGizmos; }
-
-	void DrawLookAtStatus(const FVector& _origin);
-	void DrawLookAtTarget(FVector _targetPosition, FVector _origin, FColor _color);
+	FVector GetLookAtTarget(const AActor* _target);
+	void DrawLookAtStatus(const FVector& _origin,  UWorld* _world);
+	void DrawLookAtTarget(FVector _targetPosition, FVector _origin, FColor _color,UWorld* _world);
 };

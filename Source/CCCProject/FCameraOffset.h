@@ -12,12 +12,27 @@ struct CCCPROJECT_API FCameraOffset
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMap = 2000))
+	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMax = 2000))
 		float xOffset = 0;
-	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMap = 2000))
+	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMax = 2000))
 		float yOffset = 0;
-	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMap = 2000))
+	UPROPERTY(EditAnywhere, meta = (UIMin = -2000, ClampMin = -2000, UIMax = 2000, ClampMax = 2000))
 		float zOffset = 0;
 
+	UPROPERTY(EditAnywhere)
+		bool useLocalOffset = true;
+public:
 
+	FORCEINLINE void SetLocalOffset(bool _enable) { useLocalOffset = _enable; }
+	FORCEINLINE FVector Offset() const { return FVector(xOffset, yOffset, zOffset); }
+
+	FORCEINLINE FVector GetLocalOffset(const AActor* _ref) const
+	{
+		FVector _offSetLocal = FVector::ZeroVector;
+		_offSetLocal = _ref->GetActorLocation() + 
+					   _ref->GetActorForwardVector() * xOffset + 
+					   _ref->GetActorUpVector() * zOffset + 
+					   _ref->GetActorRightVector() * yOffset;
+		return _offSetLocal;
+	}
 };

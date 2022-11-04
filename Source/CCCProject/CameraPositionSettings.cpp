@@ -3,18 +3,18 @@
 
 #include "CameraPositionSettings.h"
 #include "GizmosUtils.h"
-FVector UCameraPositionSettings::GetCameraPosition(const FTransform& _origin)
+FVector UCameraPositionSettings::GetCameraPosition(const AActor* _target) const
 {
-    return FVector(0);
+    return offset.useLocalOffset ? offset.GetLocalOffset(_target) : _target->GetActorLocation() + offset.Offset() ;
 }
 
-void UCameraPositionSettings::DrawCameraPosition(const FTransform& _target)
+void UCameraPositionSettings::DrawCameraPosition(const FTransform& _target, UWorld* _world)
 {
-    DRAW_BOX(_target.GetLocation(), FVector(100), FColor::Yellow);
+    DrawDebugBox(_world, _target.GetLocation(), FVector(100), FColor::Yellow);
     //DRAW_LINE()
 }
 
-void UCameraPositionSettings::DrawMoveToStatus(FVector _origin)
+void UCameraPositionSettings::DrawMoveToStatus(FVector _origin, UWorld* _world)
 {
 
 }

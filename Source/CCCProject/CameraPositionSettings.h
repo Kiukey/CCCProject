@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class CCCPROJECT_API UCameraPositionSettings : public UObject
+class CCCPROJECT_API UCameraPositionSettings : public UDataAsset
 {
 	GENERATED_BODY()
 
@@ -35,7 +35,8 @@ public:
 	FORCEINLINE bool UseSmoothMoveTo() const { return useSmoothMoveTo; }
 	FORCEINLINE bool DrawGizmos() const { return drawGizmos; }
 
-	FVector GetCameraPosition(const FTransform& _origin);
-	void DrawCameraPosition(const FTransform& _target);
-	void DrawMoveToStatus(FVector _origin);
+	FVector GetCameraPosition(const AActor* _target) const ;
+	void DrawCameraPosition(const FTransform& _target, UWorld* _world);
+	void DrawMoveToStatus(FVector _origin, UWorld* _world);
+
 };

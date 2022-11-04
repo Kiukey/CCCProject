@@ -16,9 +16,9 @@ class CCCPROJECT_API ACameraTPSCorr : public AActor
 		
 	UPROPERTY(VisibleAnywhere, Category = CameraTPS)
 		TObjectPtr<UCameraComponent> cameraTarget = nullptr;
-	UPROPERTY(EditAnywhere,Instanced,Category = "CameraTPS | rotation")
+	UPROPERTY(EditAnywhere,Category = "CameraTPS | rotation")
 		TObjectPtr<UCameraRotationSettings> lookAtSettings = nullptr;	
-	UPROPERTY(EditAnywhere,Instanced,Category = "CameraTPS | position")
+	UPROPERTY(EditAnywhere,Category = "CameraTPS | position")
 		TObjectPtr<UCameraPositionSettings> positionSettings = nullptr;
 	UPROPERTY(EditAnywhere, Category = CameraTPS)
 		TObjectPtr<AActor> target = nullptr;
@@ -27,7 +27,7 @@ public:
 	FORCEINLINE FVector CurrentCameraLocation() const { return GetActorLocation(); }
 	FORCEINLINE FVector CurrentTargetLocation() const 
 	{ 
-		return cameraTarget ? target->GetActorLocation() : CurrentCameraLocation();
+		return cameraTarget ? lookAtSettings->GetLookAtTarget(target) : CurrentCameraLocation();
 	}
 	FORCEINLINE FRotator CurrentCameraRotation() const { return GetActorRotation(); }
 private:
@@ -36,5 +36,5 @@ private:
 	virtual void Tick(float DeltaTime) override;
 	void OnDrawDebug();
 	void LookAtTarget();
-
+	void MoveToTarget();
 };
