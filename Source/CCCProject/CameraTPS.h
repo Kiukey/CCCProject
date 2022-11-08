@@ -145,11 +145,12 @@ class CCCPROJECT_API ACameraTPS : public AActor
 		FCameraPositionSettingsCustom positionSettings;
 	UPROPERTY(EditAnywhere)
 		bool useDebug = true;
-	UPROPERTY(EditAnywhere)
-		UBillboardComponent* billboardComponent = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Manager Item")
+		FString id = "Camera";
+		
 public:	
 	ACameraTPS();
-
+	FORCEINLINE FString ID() const { return id; }
 private:
 
 	virtual void BeginPlay() override;
@@ -158,5 +159,6 @@ private:
 	void MoveToTarget();
 	void LookAtTarget();
 	void DrawDebug();
-	void ActivateCamera();
+	void InitCamera();
+	TObjectPtr<class UCameraManager> GetCameraManager();
 };

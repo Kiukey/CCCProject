@@ -3,21 +3,20 @@
 
 #include "CameraTPS.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameModeManager.h"
 
 ACameraTPS::ACameraTPS()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
 	currentCamera = CreateDefaultSubobject<UCameraComponent>("CurrentCamera");
-	billboardComponent = CreateDefaultSubobject<UBillboardComponent>("Billboard");
 	currentCamera->SetupAttachment(RootComponent);
-	billboardComponent->SetupAttachment(RootComponent);
 }
 
 void ACameraTPS::BeginPlay()
 {
 	Super::BeginPlay();
-	ActivateCamera();
+	InitCamera();
 }
 
 void ACameraTPS::Tick(float DeltaTime)
@@ -71,7 +70,16 @@ void ACameraTPS::DrawDebug()
 	positionSettings.DrawCameraPosition(_world, target);
 }
 
-void ACameraTPS::ActivateCamera()
+void ACameraTPS::InitCamera()
 {
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
+}
+
+TObjectPtr<class UCameraManager> ACameraTPS::GetCameraManager()
+{
+	TObjectPtr<AGameModeManager> _gm = GetWorld()->GetAuthGameMode<AGameModeManager>();
+	if(!_gm)
+		return nullptr;
+
+	return _gm->IsValidCameraManager() ? _gm->CameraManager() : nullptr;
 }

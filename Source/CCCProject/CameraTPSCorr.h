@@ -22,6 +22,8 @@ class CCCPROJECT_API ACameraTPSCorr : public AActor
 		TObjectPtr<UCameraPositionSettings> positionSettings = nullptr;
 	UPROPERTY(EditAnywhere, Category = CameraTPS)
 		TObjectPtr<AActor> target = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Manager Item")
+		FString id = "Camera";
 public:	
 	ACameraTPSCorr();
 	FORCEINLINE FVector CurrentCameraLocation() const { return GetActorLocation(); }
@@ -30,11 +32,17 @@ public:
 		return cameraTarget ? lookAtSettings->GetLookAtTarget(target) : CurrentCameraLocation();
 	}
 	FORCEINLINE FRotator CurrentCameraRotation() const { return GetActorRotation(); }
+	FORCEINLINE FString ID() const { return id; }
 private:
 	void InitCamera();
 	virtual void BeginPlay() override;
+	virtual void  EndPlay(const EEndPlayReason::Type EndPlayReason);
 	virtual void Tick(float DeltaTime) override;
 	void OnDrawDebug();
 	void LookAtTarget();
 	void MoveToTarget();
+	TObjectPtr<class UCameraManager> GetCameraManager();
+public:
+	void Enable();
+	void Disable();
 };

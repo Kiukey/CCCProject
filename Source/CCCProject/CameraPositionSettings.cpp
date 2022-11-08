@@ -5,6 +5,8 @@
 #include "GizmosUtils.h"
 FVector UCameraPositionSettings::GetCameraPosition(const AActor* _target) const
 {
+    if (!_target)
+        return FVector(0);
     return offset.useLocalOffset ? offset.GetLocalOffset(_target) : _target->GetActorLocation() + offset.Offset() ;
 }
 

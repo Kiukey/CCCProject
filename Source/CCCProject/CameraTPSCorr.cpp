@@ -3,27 +3,34 @@
 
 #include "CameraTPSCorr.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameModeManager.h"
 #include "GizmosUtils.h"
 ACameraTPSCorr::ACameraTPSCorr()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	cameraTarget = CreateDefaultSubobject<UCameraComponent>("Camera");
-	//lookAtSettings = CreateDefaultSubobject<UCameraRotationSettings>("LookAtSettings");
-	//positionSettings = CreateDefaultSubobject<UCameraPositionSettings>("MoveSettings");
-	//lookAtSettings = NewObject<UCameraRotationSettings>(this, FName("lookAtSettings"));
-	//positionSettings = NewObject<UCameraPositionSettings>(this, FName("positionSettings"));
 	RootComponent = cameraTarget;
 }
 
 void ACameraTPSCorr::InitCamera()
 {
-	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
+	if (GetCameraManager())
+		GetCameraManager()->AddCamera(this);
+
 }
 
 void ACameraTPSCorr::BeginPlay()
 {
 	Super::BeginPlay();
 	InitCamera();
+}
+
+void ACameraTPSCorr::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (GetCameraManager())
+		GetCameraManager()->RemoveCamera(this);
+
+	Super::EndPlay(EndPlayReason);
 }
 
 void ACameraTPSCorr::Tick(float DeltaTime)
@@ -45,6 +52,8 @@ void ACameraTPSCorr::OnDrawDebug()
 
 void ACameraTPSCorr::LookAtTarget()
 {
+	if (!target)
+		return;
 	const FRotator& _dir = UKismetMathLibrary::FindLookAtRotation(CurrentCameraLocation(), CurrentTargetLocation());
 	const FRotator& _final = lookAtSettings->UseSmoothLookAt() ? 
 		FMath::RInterpTo(CurrentCameraRotation(), _dir, GetWorld()->DeltaTimeSeconds, lookAtSettings->RotationSpeed()):
@@ -55,7 +64,7 @@ void ACameraTPSCorr::LookAtTarget()
 
 void ACameraTPSCorr::MoveToTarget()
 {
-	if (!positionSettings->UseMoveTo())
+	if (!target || !positionSettings->UseMoveTo())
 		return;
 
 	const FVector _newPos = positionSettings->UseSmoothMoveTo() ? FMath::VInterpTo(CurrentCameraLocation(), positionSettings->GetCameraPosition(target), GetWorld()->DeltaTimeSeconds, positionSettings->PositionSpeed()) :
@@ -63,3 +72,19 @@ void ACameraTPSCorr::MoveToTarget()
 	SetActorLocation(_newPos);
 }
 
+TObjectPtr<class UCameraManager> ACameraTPSCorr::GetCameraManager()
+{
+	TObjectPtr<AGameModeManager> _gm = GetWorld()->GetAuthGameMode<AGameModeManager>();
+	if (!_gm)
+		return nullptr;
+
+	return _gm->IsValidCameraManager() ? _gm->CameraManager() : nullptr;
+}
+
+void ACameraTPSCorr::Enable()
+{
+	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
+}
+void ACameraTPSCorr::Disable()
+{
+}
