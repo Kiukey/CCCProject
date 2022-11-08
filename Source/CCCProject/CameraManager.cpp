@@ -36,6 +36,15 @@ bool UCameraManager::Exist(const ACameraTPSCorr* _camera) const
 	return allCameras.Contains(_camera->ID());
 }
 
+void UCameraManager::CreateCamera(FString _ID, AActor* _target,FVector _lookOfset, FVector _moveOffset)
+{
+	ACameraTPSCorr* _camera = GetWorld()->SpawnActor<ACameraTPSCorr>();
+
+	_camera->SetID(_ID);
+	_camera->CreateDefaultSettings(_lookOfset, _moveOffset);
+	_camera->SetTarget(_target);
+}
+
 void UCameraManager::Enable(const FString _id) const
 {
 	if (!Exist(_id))

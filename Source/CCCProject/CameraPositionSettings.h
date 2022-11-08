@@ -34,7 +34,7 @@ public:
 	FORCEINLINE float PositionSpeed() const { return positionSpeed; }
 	FORCEINLINE bool UseSmoothMoveTo() const { return useSmoothMoveTo; }
 	FORCEINLINE bool DrawGizmos() const { return drawGizmos; }
-
+	FORCEINLINE FCameraOffset& GetOffset() { return offset; }
 	FVector GetCameraPosition(const AActor* _target) const ;
 	void DrawCameraPosition(const FTransform& _target, UWorld* _world);
 	void DrawMoveToStatus(FVector _origin, UWorld* _world);

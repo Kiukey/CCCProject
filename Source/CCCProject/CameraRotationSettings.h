@@ -33,6 +33,8 @@ public:
 	FORCEINLINE float RotationSpeed() { return rotationSpeed; }
 	FORCEINLINE bool UseSmoothLookAt() { return useSmoothLookAt; }
 	FORCEINLINE bool DrawGizmos() { return drawGizmos; }
+	FORCEINLINE FCameraOffset& GetOffset() { return offset; }
+
 	FVector GetLookAtTarget(const AActor* _target);
 	void DrawLookAtStatus(const FVector& _origin,  UWorld* _world);
 	void DrawLookAtTarget(FVector _targetPosition, FVector _origin, FColor _color,UWorld* _world);

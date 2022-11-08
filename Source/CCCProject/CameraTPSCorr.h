@@ -33,6 +33,10 @@ public:
 	}
 	FORCEINLINE FRotator CurrentCameraRotation() const { return GetActorRotation(); }
 	FORCEINLINE FString ID() const { return id; }
+	FORCEINLINE void SetTarget(AActor* _target) { target = _target; }
+	FORCEINLINE void SetID(FString _newID) { id = _newID; }
+	FORCEINLINE UCameraRotationSettings* GetRotationSettings() { return lookAtSettings; }
+	FORCEINLINE UCameraPositionSettings* GetMovementSettings() { return positionSettings; }
 private:
 	void InitCamera();
 	virtual void BeginPlay() override;
@@ -45,4 +49,5 @@ private:
 public:
 	void Enable();
 	void Disable();
+	void CreateDefaultSettings(FVector _lookAtOffset, FVector _movementOffset);
 };

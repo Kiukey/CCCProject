@@ -25,7 +25,12 @@ public:
 
 	FORCEINLINE void SetLocalOffset(bool _enable) { useLocalOffset = _enable; }
 	FORCEINLINE FVector Offset() const { return FVector(xOffset, yOffset, zOffset); }
-
+	FORCEINLINE void SetOffset(FVector _newOffset)
+	{
+		xOffset = _newOffset.X;
+		yOffset = _newOffset.Y;
+		zOffset = _newOffset.Z;
+	}
 	FORCEINLINE FVector GetLocalOffset(const AActor* _ref) const
 	{
 		FVector _offSetLocal = FVector::ZeroVector;

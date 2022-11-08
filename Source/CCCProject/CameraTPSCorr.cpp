@@ -72,6 +72,15 @@ void ACameraTPSCorr::MoveToTarget()
 	SetActorLocation(_newPos);
 }
 
+void ACameraTPSCorr::CreateDefaultSettings(FVector _lookAtOffset, FVector _movementOffset)
+{
+	lookAtSettings = NewObject<UCameraRotationSettings>(this);
+	lookAtSettings->GetOffset().SetOffset(_lookAtOffset);
+	positionSettings = NewObject<UCameraPositionSettings>(this);
+	positionSettings->GetOffset().SetOffset(_movementOffset);
+
+}
+
 TObjectPtr<class UCameraManager> ACameraTPSCorr::GetCameraManager()
 {
 	TObjectPtr<AGameModeManager> _gm = GetWorld()->GetAuthGameMode<AGameModeManager>();
