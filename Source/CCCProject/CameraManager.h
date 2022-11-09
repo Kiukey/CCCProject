@@ -25,5 +25,5 @@ public:
 	UFUNCTION(BlueprintCallable) bool Exist(const FString _id) const ;
 	UFUNCTION(BlueprintCallable) void Enable(const FString _id) const ;
 	bool Exist(const ACameraTPSCorr* _camera) const ;
-	void CreateCamera(FString _ID,AActor* _target ,FVector _lookOfset, FVector _moveOffset);
+	UFUNCTION(BlueprintCallable) ACameraTPSCorr* CreateCamera(const FString _ID, AActor* _target,UCameraPositionSettings* _positionData, UCameraRotationSettings* _rotation);
 };

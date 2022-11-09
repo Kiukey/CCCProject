@@ -37,8 +37,9 @@ public:
 	FORCEINLINE void SetID(FString _newID) { id = _newID; }
 	FORCEINLINE UCameraRotationSettings* GetRotationSettings() { return lookAtSettings; }
 	FORCEINLINE UCameraPositionSettings* GetMovementSettings() { return positionSettings; }
+	FORCEINLINE void SetPosition(UCameraPositionSettings* _position) { positionSettings = _position; }
+	FORCEINLINE void SetRotation(UCameraRotationSettings* _rotation) { lookAtSettings = _rotation; }
 private:
-	void InitCamera();
 	virtual void BeginPlay() override;
 	virtual void  EndPlay(const EEndPlayReason::Type EndPlayReason);
 	virtual void Tick(float DeltaTime) override;
@@ -46,8 +47,11 @@ private:
 	void LookAtTarget();
 	void MoveToTarget();
 	TObjectPtr<class UCameraManager> GetCameraManager();
+	void InitDelay();
 public:
-	void Enable();
-	void Disable();
+	UFUNCTION(BlueprintCallable) void Enable();
+	UFUNCTION(BlueprintCallable) void Disable();
 	void CreateDefaultSettings(FVector _lookAtOffset, FVector _movementOffset);
+	UFUNCTION() void InitCamera();
+
 };

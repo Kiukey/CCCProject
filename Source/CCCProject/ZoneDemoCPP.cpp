@@ -14,6 +14,12 @@ void AZoneDemoCPP::BeginPlay()
 	Super::BeginPlay();
 	
 	cameraManager = GetCameraManager();
+	FName _pathPos = "CameraPositionSettings'/Game/SettingsData/DataSettingsPosition.DataSettingsPosition'",
+		  _pathRot = "CameraRotationSettings'/Game/SettingsData/DataRotationSettings.DataRotationSettings'";;
+	UCameraPositionSettings* _posSettings = Cast<UCameraPositionSettings>( StaticLoadObject(UCameraPositionSettings::StaticClass(), this, *_pathPos.ToString())); 
+	UCameraRotationSettings* _rotSettings = Cast<UCameraRotationSettings>(StaticLoadObject(UCameraRotationSettings::StaticClass(), this, *_pathRot.ToString()));
+	ACameraTPSCorr* _cam =  cameraManager->CreateCamera("Zob", this, _posSettings, _rotSettings);
+	//_cam->Enable();
 }
 
 void AZoneDemoCPP::Tick(float DeltaTime)

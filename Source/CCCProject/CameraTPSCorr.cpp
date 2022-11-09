@@ -3,8 +3,10 @@
 
 #include "CameraTPSCorr.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "GameModeManager.h"
 #include "GizmosUtils.h"
+#include "LogUtils.h"
 ACameraTPSCorr::ACameraTPSCorr()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,12 +19,17 @@ void ACameraTPSCorr::InitCamera()
 	if (GetCameraManager())
 		GetCameraManager()->AddCamera(this);
 
+	Enable();
+	LOG_WARNING("Coucou");
 }
 
 void ACameraTPSCorr::BeginPlay()
 {
 	Super::BeginPlay();
-	InitCamera();
+
+	InitDelay();
+	
+	/*InitCamera();*/
 }
 
 void ACameraTPSCorr::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -52,7 +59,7 @@ void ACameraTPSCorr::OnDrawDebug()
 
 void ACameraTPSCorr::LookAtTarget()
 {
-	if (!target)
+	if (!target || !lookAtSettings ||!lookAtSettings->UseLookAt())
 		return;
 	const FRotator& _dir = UKismetMathLibrary::FindLookAtRotation(CurrentCameraLocation(), CurrentTargetLocation());
 	const FRotator& _final = lookAtSettings->UseSmoothLookAt() ? 
@@ -64,7 +71,7 @@ void ACameraTPSCorr::LookAtTarget()
 
 void ACameraTPSCorr::MoveToTarget()
 {
-	if (!target || !positionSettings->UseMoveTo())
+	if (!target || !positionSettings ||!positionSettings->UseMoveTo())
 		return;
 
 	const FVector _newPos = positionSettings->UseSmoothMoveTo() ? FMath::VInterpTo(CurrentCameraLocation(), positionSettings->GetCameraPosition(target), GetWorld()->DeltaTimeSeconds, positionSettings->PositionSpeed()) :
@@ -90,8 +97,19 @@ TObjectPtr<class UCameraManager> ACameraTPSCorr::GetCameraManager()
 	return _gm->IsValidCameraManager() ? _gm->CameraManager() : nullptr;
 }
 
+void ACameraTPSCorr::InitDelay()
+{
+	FLatentActionInfo _delay/* (-1,1234,*FString("InitCamera"), this)*/;
+	_delay.CallbackTarget = this;
+	_delay.ExecutionFunction = "InitCamera";
+	_delay.UUID = 1234;
+	_delay.Linkage = 0;
+	UKismetSystemLibrary::Delay(this, .1f, _delay);
+}
+
 void ACameraTPSCorr::Enable()
 {
+	LOG_WARNING("Enable Cam");
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
 }
 void ACameraTPSCorr::Disable()
