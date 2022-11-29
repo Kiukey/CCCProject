@@ -20,7 +20,6 @@ void ACameraTPSCorr::InitCamera()
 		GetCameraManager()->AddCamera(this);
 
 	Enable();
-	LOG_WARNING("Coucou");
 }
 
 void ACameraTPSCorr::BeginPlay()
@@ -109,7 +108,6 @@ void ACameraTPSCorr::InitDelay()
 
 void ACameraTPSCorr::Enable()
 {
-	LOG_WARNING("Enable Cam");
 	GetWorld()->GetFirstPlayerController()->SetViewTarget(this);
 }
 void ACameraTPSCorr::Disable()
